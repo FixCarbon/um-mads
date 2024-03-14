@@ -1,0 +1,10 @@
+name: curr-env
+dependencies:
+- pip
+- pip:
+  # works for regular pip packages
+  - xarray[complete]
+  - shapely
+  - s3fs
+  - rasterio
+  - geojson
