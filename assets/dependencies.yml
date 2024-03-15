@@ -8,3 +8,5 @@ dependencies:
   - s3fs
   - rasterio
   - geojson
+  -xclim
+  -msgpack == 1.0.8
