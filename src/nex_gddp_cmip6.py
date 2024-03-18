@@ -3,6 +3,9 @@ import warnings
 from typing import List
 
 import xarray as xr
+import geopandas
+import rioxarray
+from shapely.geometry import mapping
 
 # Ignore warnings containing the substring "Performance"
 warnings.filterwarnings("ignore", message=".*Increasing.*")
@@ -69,3 +72,29 @@ def get_nex_dataset(variables: List[str], scenarios: List[str]) -> xr.Dataset:
         groups, engine="zarr", consolidated=True, preprocess=preprocess_ds
     )
     return ds
+
+def load_region(filepath):
+    """Load a GeoJSON file into a GeoDataFrame and adjust longitude values.
+
+    Args:
+        filepath: Path to the GeoJSON file.
+
+    Returns:
+        A GeoDataFrame with adjusted longitude values.
+    """
+    geodataframe = geopandas.read_file(filepath)
+    geodataframe.geometry = geodataframe.geometry.translate(xoff=180)
+    return geodataframe
+
+def select_region(dataset, geodataframe):
+    """Clip a dataset by a GeoDataFrame's boundaries.
+
+    Args:
+        dataset: The dataset to be clipped.
+        geodataframe: A GeoDataFrame that defines the region to clip.
+
+    Returns:
+        The clipped dataset.
+    """
+    rio_dataset = dataset.rio.write_crs("EPSG:4326")
+    return rio_dataset.rio.clip(geodataframe.geometry.apply(mapping), geodataframe.crs)
