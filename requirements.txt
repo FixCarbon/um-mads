@@ -1,0 +1,17 @@
+fiona == 1.9.5
+geojson == 3.1.0
+geopandas == 0.14.3
+matplotlib >= 2.8.3
+numpy >= 1.26.4
+pandas >= 2.2.0
+rioxarray == 0.15.1
+s3fs >= 2024 # to access S3 bucket
+scikit-learn >= 1.4.1
+
+# Used for webscraping cultivar
+# selenium == 4.18.1 
+
+shapely >= 2.0
+statsmodels == 0.14.1 # if using ARIMA for regression
+xarray == 2024.2.0
+xclim == 0.48.2
