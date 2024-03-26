@@ -46,6 +46,11 @@ def get_variable_groups(variables: List[str], scenarios: List[str]) -> List[str]
 def preprocess_ds(ds: xr.Dataset) -> xr.Dataset:
     """Drop duplicate models from the dataset."""
     ds = ds.drop_duplicates("model", keep=False)
+
+    # converts 0-360, circular to -180-+180  longitude
+    ds = ds.assign_coords(lon=(((ds.lon + 180) % 360) - 180))
+    ds = ds.roll(lon=int(len(ds['lon']) / 2), roll_coords=True)
+
     ds.attrs["crs"] = "EPSG:4326"
     return ds
 
@@ -84,7 +89,7 @@ def load_region(filepath):
         A GeoDataFrame with adjusted longitude values.
     """
     geodataframe = geopandas.read_file(filepath)
-    geodataframe.geometry = geodataframe.geometry.translate(xoff=180)
+    geodataframe.geometry = geodataframe.geometry.translate(xoff=180) # 360 converts -180 - 180 longitude to 0 - 360 longitude degrees east
     return geodataframe
 
 def select_region(dataset, geodataframe):
@@ -97,5 +102,7 @@ def select_region(dataset, geodataframe):
     Returns:
         The clipped dataset.
     """
-    rio_dataset = dataset.rio.write_crs("EPSG:4326")
+
+    # https://corteva.github.io/rioxarray/html/getting_started/crs_management.html
+    rio_dataset = dataset.rio.write_crs("EPSG:4326").rio.set_spatial_dims('lon', 'lat', inplace = True)
     return rio_dataset.rio.clip(geodataframe.geometry.apply(mapping), geodataframe.crs)
