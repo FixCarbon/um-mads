@@ -105,7 +105,7 @@ class WeatherAPI:
         self,
         start_date: Optional[str | dt.datetime] = pd.to_datetime("2015-01-01"),
         end_date: Optional[str | dt.datetime] = dt.datetime.utcnow(),
-        frequency: str = "hourly",
+        frequency: str = "H",
         model="era5",
     ):
         if isinstance(start_date, str):
@@ -152,7 +152,7 @@ class WeatherAPI:
                 "api-key": API_KEY,
                 "model": model,
                 "format": "netcdf",
-                "frequency": frequency,
+                "freq": frequency,
             },
         )
         ncdf = r.content  # NetCDF is a single file format that is delivered as binary
@@ -183,6 +183,7 @@ class WeatherAPI:
 
         # lat: a list of latitudes
         # lon a list of longitudes        
+        # for each polygon, return centroid in (x,y)
         lat, lon = self.geometry.centroid.y.values, self.geometry.centroid.x.values
 
         if (np.abs(lat) > 35).any():
@@ -200,6 +201,7 @@ class WeatherAPI:
                 "lon": lon,
                 "api-key": API_KEY,
                 "model": model,
+                "freq":frequency
             },
         )
         response = r.json()
