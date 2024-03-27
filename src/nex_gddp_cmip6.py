@@ -79,19 +79,6 @@ def get_nex_dataset(variables: List[str], scenarios: List[str]) -> xr.Dataset:
     )
     return ds
 
-def load_region(filepath):
-    """Load a GeoJSON file into a GeoDataFrame and adjust longitude values.
-
-    Args:
-        filepath: Path to the GeoJSON file.
-
-    Returns:
-        A GeoDataFrame with adjusted longitude values.
-    """
-    geodataframe = geopandas.read_file(filepath)
-    geodataframe.geometry = geodataframe.geometry.translate(xoff=180) # 360 converts -180 - 180 longitude to 0 - 360 longitude degrees east
-    return geodataframe
-
 def select_region(dataset, geodataframe):
     """Clip a dataset by a GeoDataFrame's boundaries.
 
