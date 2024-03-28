@@ -86,17 +86,26 @@ def get_weather_data_df(response) -> pd.DataFrame:
 
 
 class WeatherAPI:
-    def __init__(self, project_id):
+    def __init__(self, gs, local_tz = 'UTC'):
         # TODO: We use "project_id" as a primitive that can be used to fetch a ton of information
         # about a projectm, which represents some geographic area. What you'll want to do is replace
-        # this with some variable that contains the geographical area of interest
-        pass
+        # this with some variable that contains the geographical area of interest: done
+        
+        # gs = GeoPandas.GeoSeries
+        self.geometry = gs
+        self.local_tz = local_tz
+
+        if 'polygon' in str(type(gs.iloc[-1])):
+            self.is_polygon = True
+        else:
+            self.is_polygon = None
+
 
     def get_data(
         self,
         start_date: Optional[str | dt.datetime] = pd.to_datetime("2015-01-01"),
         end_date: Optional[str | dt.datetime] = dt.datetime.utcnow(),
-        frequency: str = "hourly",
+        frequency: str = "H",
         model="era5",
     ):
         if isinstance(start_date, str):
@@ -104,8 +113,8 @@ class WeatherAPI:
         if isinstance(end_date, str):
             end_date = pd.to_datetime(end_date)
 
-        # TODO: Replace these if statements with something that matches your geometry variables
-        if is_polygon:  # For projects with mutliple geometries, get NetCDF
+        # TODO: Replace these if statements with something that matches your geometry variables: done
+        if self.is_polygon:  # For projects with mutliple geometries, get NetCDF
             ds = self._get_area_data(start_date, end_date, frequency, model)
             return ds
         else:  # If just point data
@@ -113,8 +122,9 @@ class WeatherAPI:
             return df
 
     def _get_area_data(self, start_date, end_date, frequency, model):
-        # TODO: Replace with your own way to get bounding box of your geometry
-        bbox = self.geometry._unary_union.bounds
+
+        # TODO: done
+        bbox = self.geometry.unary_union.bounds
         # Add a 10% buffer to the bounding box
         width = bbox[2] - bbox[0]
         height = bbox[3] - bbox[1]
@@ -142,11 +152,11 @@ class WeatherAPI:
                 "api-key": API_KEY,
                 "model": model,
                 "format": "netcdf",
-                "frequency": frequency,
+                "freq": frequency,
             },
         )
-
         ncdf = r.content  # NetCDF is a single file format that is delivered as binary
+
         ds = xr.open_dataset(
             io.BytesIO(ncdf), engine="h5netcdf"
         )  # Open up the binary file
@@ -169,12 +179,17 @@ class WeatherAPI:
         return ds
 
     def _get_location_data(self, start_date, end_date, frequency, model):
-        # TODO: Replace with your own way to get lat/lon of your geometry
-        lat, lon = self.geometry._centroid.y, self.geometry._centroid.x
-        if np.abs(lat) > 35:
+        # TODO: Replace with your own way to get lat/lon of your geometry: done
+
+        # lat: a list of latitudes
+        # lon a list of longitudes        
+        # for each polygon, return centroid in (x,y)
+        lat, lon = self.geometry.centroid.y.values, self.geometry.centroid.x.values
+
+        if (np.abs(lat) > 35).any():
             for param in SNOW_PARAMS:
                 PARAMS[param] = SNOW_PARAMS[param]
-        # API Reference: https://docs.oikolab.com/references/api-reference/weather-api
+        # API Reference: https://docs.oikolab.com/references/#weather
 
         r = requests.get(
             "https://api.oikolab.com/weather",
@@ -186,6 +201,7 @@ class WeatherAPI:
                 "lon": lon,
                 "api-key": API_KEY,
                 "model": model,
+                "freq":frequency
             },
         )
         response = r.json()
@@ -216,10 +232,10 @@ class WeatherAPI:
 
         df["timestamp_utc"] = df["timestamp_utc"].dt.tz_localize("UTC")
         # Use the `utc_offset_hrs` column to convert timezone
-        # TODO: figure out a way to get the timezone for the area that you're looking at
-        df["timestamp_local"] = df["timestamp_utc"].dt.tz_convert(
-            self.geometry._timezone
-        )
+        # TODO: figure out a way to get the timezone for the area that you're looking at: done
+        # https://www.w3resource.com/pandas/series/series-dt-tz_convert.php#:~:text=dt.-,tz_convert()%20function,one%20time%20zone%20to%20another.&text=Time%20zone%20for%20time.
+        df["timestamp_local"] = df["timestamp_utc"].dt.tz_convert(self.local_tz)
+
         df["lat"] = df["lat"].astype(float)
         df["lon"] = df["lon"].astype(float)
 
