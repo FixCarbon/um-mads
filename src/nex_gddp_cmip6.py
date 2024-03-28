@@ -3,6 +3,9 @@ import warnings
 from typing import List
 
 import xarray as xr
+import geopandas
+import rioxarray
+from shapely.geometry import mapping
 
 import geopandas
 import rioxarray
