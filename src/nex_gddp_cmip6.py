@@ -3,6 +3,13 @@ import warnings
 from typing import List
 
 import xarray as xr
+import geopandas
+import rioxarray
+from shapely.geometry import mapping
+
+import geopandas
+import rioxarray
+from shapely.geometry import mapping
 
 # Ignore warnings containing the substring "Performance"
 warnings.filterwarnings("ignore", message=".*Increasing.*")
@@ -42,6 +49,11 @@ def get_variable_groups(variables: List[str], scenarios: List[str]) -> List[str]
 def preprocess_ds(ds: xr.Dataset) -> xr.Dataset:
     """Drop duplicate models from the dataset."""
     ds = ds.drop_duplicates("model", keep=False)
+
+    # converts 0-360, circular to -180-+180  longitude
+    ds = ds.assign_coords(lon=(((ds.lon + 180) % 360) - 180))
+    ds = ds.roll(lon=int(len(ds['lon']) / 2), roll_coords=True)
+
     ds.attrs["crs"] = "EPSG:4326"
     return ds
 
@@ -69,3 +81,18 @@ def get_nex_dataset(variables: List[str], scenarios: List[str]) -> xr.Dataset:
         groups, engine="zarr", consolidated=True, preprocess=preprocess_ds
     )
     return ds
+
+def select_region(dataset, geodataframe):
+    """Clip a dataset by a GeoDataFrame's boundaries.
+
+    Args:
+        dataset: The dataset to be clipped.
+        geodataframe: A GeoDataFrame that defines the region to clip.
+
+    Returns:
+        The clipped dataset.
+    """
+
+    # https://corteva.github.io/rioxarray/html/getting_started/crs_management.html
+    rio_dataset = dataset.rio.write_crs("EPSG:4326").rio.set_spatial_dims('lon', 'lat', inplace = True)
+    return rio_dataset.rio.clip(geodataframe.geometry.apply(mapping), geodataframe.crs)
