@@ -7,6 +7,10 @@ import geopandas
 import rioxarray
 from shapely.geometry import mapping
 
+import geopandas
+import rioxarray
+from shapely.geometry import mapping
+
 # Ignore warnings containing the substring "Performance"
 warnings.filterwarnings("ignore", message=".*Increasing.*")
 
