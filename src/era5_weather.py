@@ -23,7 +23,7 @@ class WeatherAPI:
 
     def get_data(
         self,
-        start_date: Optional[str | dt.datetime] = pd.to_datetime("2015-01-01"),
+        start_date: Optional[str | dt.datetime] = pd.to_datetime("1985-01-01"),
         end_date: Optional[str | dt.datetime] = pd.to_datetime("2023-12-31"),
         frequency: str = "D",
         model="era5",
