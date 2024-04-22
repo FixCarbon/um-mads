@@ -29,7 +29,9 @@ Results for the proof of concept are detailed in the `reports/report.pdf` file. 
 
 Assuming the USDA continues to use a 30-year rolling average for risk assessment, most apple cultivars will continue to be viable. However, two cultivars—Cortland and Franklin Cider—may no longer be viable past 2025, when the entire region shifts into 6A. Furthermore, the majority of the region will be in 7A just after 2030, jeopardizing an additional 13 cultivars, including Ben Davis, Empire, Enterprise, and Liberty, among others.
 
-![plot](reports/figures/fig5_hardiness_hists.png)
+_USDA Plant Hardiness Zones in the Eastern Mountain Region from 2014 to 2050 based on Elastic Net Regression_
+
+![plot](reports/figures/fig4_weather_usda.gif)
 
 ## References
 * Hoplamazian, M. (2023, October 20). A bad apple season has some U.S. fruit growers planning for life in a warmer world. NPR. Retrieved April 17, 2024, from https://www.npr.org/2023/10/20/1207202139/a-bad-apple-season-has-some-u-s-fruit-growers-planning-for-life-in-a-warmer-worl
