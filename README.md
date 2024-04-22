@@ -3,10 +3,14 @@ Extensive information exists regarding the effects of climate change on agricult
 
 ## Getting Started
 ### Requirements
-Text
+See requirements.txt in requirements folder. Geopandas, pandas and xarray are used heavily.
 ### Installation
-Text
+1. Clone repository with git clone https://github.com/FixCarbon/um-mads.git
+2. Install dependencies with pip install -r requirements/requirements.txt
+3. create_polygons.ipynb, scrape_cultivars.ipynb, get_climate_data.ipynb, and get_weather_data.ipynb specify and pull the selected data.
+4. transform_data.ipynb and train_model.ipynb reshape and run predictions on the selected data.
+5. map_cultivars.ipynb and visualize_data.ipynb create and save visuals from model results.
 ## Requesting Data
-Text
+Climate model and climate data came from APIs by Fix6 and Oikolab, in the NEX-GDDP-CMIP6 downscaled daily predictions and the ERA5 datasets respectively, which require their own access keys.
 ## Interpreting Results
-Text
+Figures are within notebooks. Our model acheived an R2 score or 0.89, and predicted an increase in average hardiness zones from 6.5 to 8. However, most apple cultivars will still be able to be grown.
