@@ -8,10 +8,10 @@ See the `requirements/requirements.txt` file. GeoPandas, pandas, scikit-learn, a
 1. Clone the GitHub repository using `git clone https://github.com/FixCarbon/um-mads.git`.
 2. Install dependencies using `pip install -r requirements/requirements.txt`.
 3. Download a GeoTIFF file for a particular crop and region from https://croplandcros.scinet.usda.gov/.
-4. Run the `create_polygons.ipynb` notebook with the GeoTIFF file to define a geographic area.
-5. Run the `get_climate_data.ipynb` and `get_weather_data.ipynb` notebooks with the polygons from `create_polygons.ipynb` to retrieve data for the geographic area.
-6. Run the `transform_data.ipynb` and `train_model.ipynb` notebooks to predict temperature for the geographic area.
-7. Run the `map_cultivars.ipynb` and `visualize_data.ipynb` notebooks to create and save visuals.
+4. Run the [create_polygons.ipynb](notebooks/create_polygons.ipynb) notebook with the GeoTIFF file to define a geographic area.
+5. Run the [get_climate_data.ipynb](notebooks/get_climate_data.ipynb) and [get_weather_data.ipynb](notebooks/get_weather_data.ipynb) notebooks to retrieve data for the geographic area.
+6. Run the [transform_data.ipynb](notebooks/transform_data.ipynb) and [train_model.ipynb](notebooks/train_model.ipynb) notebooks to predict temperature.
+7. Run the [map_cultivars.ipynb](notebooks/map_cultivars.ipynb) and [visualize_data.ipynb](notebooks/visualize_data.ipynb) notebooks to create and save visuals.
 ## Requesting Data
 To access climate data, you will need credentials for the FixCarbon Amazon S3 bucket. Similarly, to access weather data, you will need credentials for Oikolab. FixCarbon provided both sets of credentials for this project. If you have credentials, create a `hidden.py` file. An example template is provided below.
 
