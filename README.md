@@ -13,7 +13,17 @@ See the requirements.txt file in the requirements folder. GeoPandas, pandas, sci
 6. Run the `transform_data.ipynb` and `train_model.ipynb` notebooks to predict temperature and USDA Plant Hardiness Zone for the geographic area.
 7. Run the `map_cultivars.ipynb` and `visualize_data.ipynb` notebooks create and save visuals.
 ## Requesting Data
-To access climate data, users will need credentials for the FixCarbon Amazon S3 bucket. Similarly, to access weather data, users will need credentials for Oikolab. FixCarbon provided both sets of credentials for this project.
+To access climate data, you will need credentials for the FixCarbon Amazon S3 bucket. Similarly, to access weather data, you will need credentials for Oikolab. FixCarbon provided both sets of credentials for this project. If you have credentials, create a `hidden.py` file. An example template is provided below.
+
+```
+import os
+
+os.environ['AWS_ACCESS_KEY_ID'] = 'YOUR_AWS_ACCESS_KEY_ID'
+os.environ['AWS_SECRET_ACCESS_KEY'] = 'YOUR_AWS_SECRET_ACCESS_KEY'
+os.environ['AWS_DEFAULT_REGION'] = 'us-east-1'
+os.environ['OIKOLAB_API_KEY'] = 'YOUR_OIKOLAB_API_KEY'
+```
+
 ## Interpreting Results
 Figures are within notebooks. Our model acheived an R2 score or 0.89, and predicted an increase in average hardiness zones from 6.5 to 8. However, most apple cultivars will still be able to be grown.
 
