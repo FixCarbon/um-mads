@@ -7,11 +7,13 @@ See the requirements.txt file in the requirements folder. GeoPandas, pandas, sci
 ### Installation
 1. Clone the GitHub repository using `git clone https://github.com/FixCarbon/um-mads.git`.
 2. Install dependencies using `pip install -r requirements/requirements.txt`.
-3. create_polygons.ipynb, scrape_cultivars.ipynb, get_climate_data.ipynb, and get_weather_data.ipynb specify and pull the selected data.
-4. transform_data.ipynb and train_model.ipynb reshape and run predictions on the selected data.
-5. map_cultivars.ipynb and visualize_data.ipynb create and save visuals from model results.
+3. Download a GeoTIFF file for a particular crop and region from `https://croplandcros.scinet.usda.gov/`.
+4. Run the `create_polygons.ipynb` notebook with the GeoTIFF file to define a geographic area.
+5. Run the `get_climate_data.ipynb` and `get_weather_data.ipynb` notebooks with the polygons from `create_polygons.ipynb` to retrieve data for the geographic area.
+6. Run the `transform_data.ipynb` and `train_model.ipynb` notebooks to predict temperature and USDA Plant Hardiness Zone for the geographic area.
+7. Run the `map_cultivars.ipynb` and `visualize_data.ipynb` notebooks create and save visuals.
 ## Requesting Data
-Climate model and climate data came from APIs by Fix6 and Oikolab, in the NEX-GDDP-CMIP6 downscaled daily predictions and the ERA5 datasets respectively, which require their own access keys.
+To access climate data, users will need credentials for the FixCarbon Amazon S3 bucket. Similarly, to access weather data, users will need credentials for Oikolab. FixCarbon provided both sets of credentials for this project.
 ## Interpreting Results
 Figures are within notebooks. Our model acheived an R2 score or 0.89, and predicted an increase in average hardiness zones from 6.5 to 8. However, most apple cultivars will still be able to be grown.
 
