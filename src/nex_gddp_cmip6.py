@@ -1,3 +1,6 @@
+# Initial code provided by Chase Dwelle at FixCarbon.
+# Adaptations have been made for current project.
+
 import logging
 import warnings
 from typing import List
